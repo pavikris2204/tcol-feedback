@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF‑8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TCOL Feedback Snapshot</title>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f3f4f6;
+      display: flex;
+      height: 100vh;
+      flex-direction: row;
+    }
+    .sidebar {
+      width: 260px;
+      background-color: #1f2937;
+      color: #d1d5db;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+    }
+    .sidebar .title {
+      font-size: 16px;
+      margin-bottom: 30px;
+    }
+    .notepad-header {
+      color: white;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .notepad-header i {
+      margin-right: 10px;
+      font-size: 18px;
+    }
+    .completion-status {
+      color: #9ca3af;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .progress-circle {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: conic-gradient(#3b82f6 0%, #4b5563 0%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: white;
+      margin-bottom: 20px;
+    }
+    .nav-item {
+      padding: 10px;
+      margin-bottom: 6px;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+    }
+    .nav-item.active {
+      background-color: #3b82f6;
+    }
+    .main {
+      flex: 1;
+      padding: 30px 40px;
+      overflow-y: auto;
+    }
+    h1 {
+      margin-bottom: 30px;
+      font-size: 22px;
+      color: #1f2937;
+    }
+    .card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 18px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .question-header {
+      font-size: 17px;
+      font-weight: bold;
+      color: #374151;
+      margin-bottom: 12px;
+    }
+    .options label {
+      display: inline-block;
+      margin-right: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .options input[type="radio"],
+    .options input[type="checkbox"] {
+      margin-right: 6px;
+    }
+    select, textarea {
+      width: 100%;
+      font-size: 14px;
+      padding: 8px;
+      border: 1px solid #d1d5db;
+      border-radius: 4px;
+    }
+    textarea {
+      resize: vertical;
+      height: 60px;
+    }
+
+    /* Responsive Styling */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+      }
+      .sidebar .title {
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+      .notepad-header {
+        font-size: 14px;
+        margin-bottom: 0;
+      }
+      .completion-status {
+        font-size: 12px;
+        margin: 0 10px;
+      }
+      .progress-circle {
+        width: 40px;
+        height: 40px;
+        font-size: 12px;
+        margin: 0;
+      }
+      .nav-item {
+        display: none;
+      }
+      .main {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 18px;
+      }
+      .question-header {
+        font-size: 16px;
+      }
+      .options label {
+        display: block;
+        margin: 8px 0;
+      }
+      select, textarea {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="title">Go back to summary</div>
+  <div class="notepad-header"><i class="fas fa-clipboard"></i>TCOL ‑ Operational Leadership</div>
+  <div class="completion-status">0 of 15 complete</div>
+  <div class="progress-circle">0%</div>
+  <div class="nav-item active">Training Center Requirements</div>
+</div>
+
+<div class="main">
+  <h1>TCOL – Training Center Operational Leadership</h1>
+  <div id="questions-container"></div>
+</div>
+
+<script>
+  const questions = [
+    "Did the trainee arrive on time for today’s scheduled shift?",
+    "Was the trainee in uniform and ready to begin training promptly?",
+    "Did the trainee appear to have reviewed their MyAcademy materials prior to shift?",
+    "Which STP sector was covered today?",
+    "How engaged was the trainee in today’s training?",
+    "Did the trainee complete the assigned STP tasks for the day?",
+    "Did you observe any safety or SOP concerns during training?",
+    "Was the trainee respectful and receptive to coaching?",
+    "Was follow‑up or redirection required during the shift?",
+    "Would you recommend this trainee for store placement as of now?",
+    "Has the trainee completed all MyAcademy modules assigned up to this date?",
+    "Has the 6‑week or 12‑week check‑in been discussed or scheduled?",
+    "Key strengths observed today:",
+    "Areas for improvement or continued coaching:",
+    "Do you recommend a call or touch‑base with the Store Manager?"
+  ];
+
+  const container = document.getElementById('questions-container');
+
+  questions.forEach((text, idx) => {
+    const num = idx + 1;
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `<div class="question-header">${num}. ${text}</div><div class="options"></div>`;
+    const opts = card.querySelector('.options');
+    let inputs = [];
+
+    if (text.includes('Which STP')) {
+      opts.innerHTML = `
+        <select name="q${num}">
+          <option disabled selected>Select one…</option>
+          <option>Stocking</option><option>Cashiering</option><option>Sales Floor</option><option>Front End</option>
+        </select>`;
+      inputs = [opts.querySelector('select')];
+    } else if (text.endsWith(':') || text.includes('strengths') || text.includes('improvement')) {
+      opts.innerHTML = `<textarea name="q${num}" placeholder="Short answer…"></textarea>`;
+      inputs = [opts.querySelector('textarea')];
+    } else if (text.includes('Do you recommend')) {
+      opts.innerHTML = `
+        <label><input type="radio" name="q${num}" value="Yes"> Yes</label>
+        <label><input type="radio" name="q${num}" value="No"> No</label>`;
+      inputs = Array.from(opts.querySelectorAll('input'));
+    } else {
+      const choices = (text.includes('MyAcademy') || text.includes('follow-up')) ?
+        ['Yes','No','Partially'] : (text.includes('engaged') ?
+        ['Fully engaged','Occasionally disengaged','Frequently disengaged'] :
+        ['Yes','No','N/A']);
+      opts.innerHTML = choices.map(c =>
+        `<label><input type="radio" name="q${num}" value="${c}"> ${c}</label>`).join('');
+      inputs = Array.from(opts.querySelectorAll('input'));
+    }
+
+    container.appendChild(card);
+    inputs.forEach(input => {
+      input.addEventListener('change', updateProgress);
+    });
+  });
+
+  function updateProgress() {
+    const total = questions.length;
+    let done = 0;
+    questions.forEach((_, idx) => {
+      const el = document.querySelector(`[name="q${idx+1}"]`);
+      if (!el) return;
+      if (el.type === 'select-one') {
+        if (el.value !== '') done++;
+      } else if (el.tagName === 'TEXTAREA') {
+        if (el.value.trim().length > 0) done++;
+      } else {
+        if (document.querySelector(`[name="q${idx+1}"]:checked`)) done++;
+      }
+    });
+    const percent = Math.round((done / total) * 100);
+    document.querySelector('.completion-status').textContent = `${done} of ${total} complete`;
+    document.querySelector('.progress-circle').textContent = `${percent}%`;
+    document.querySelector('.progress-circle').style.background =
+      `conic-gradient(#3b82f6 0% ${percent}%, #4b5563 ${percent}% 100%)`;
+  }
+</script>
+
+</body>
+</html>
