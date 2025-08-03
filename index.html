@@ -1,268 +1,189 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF‑8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TCOL Feedback Snapshot</title>
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <style>
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f3f4f6;
-      display: flex;
-      height: 100vh;
-      flex-direction: row;
-    }
-    .sidebar {
-      width: 260px;
-      background-color: #1f2937;
-      color: #d1d5db;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-    }
-    .sidebar .title {
-      font-size: 16px;
-      margin-bottom: 30px;
-    }
-    .notepad-header {
-      color: white;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      margin-bottom: 8px;
-    }
-    .notepad-header i {
-      margin-right: 10px;
-      font-size: 18px;
-    }
-    .completion-status {
-      color: #9ca3af;
-      font-size: 13px;
-      margin-bottom: 16px;
-    }
-    .progress-circle {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      background: conic-gradient(#3b82f6 0%, #4b5563 0%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      color: white;
-      margin-bottom: 20px;
-    }
-    .nav-item {
-      padding: 10px;
-      margin-bottom: 6px;
-      border-radius: 4px;
-      cursor: pointer;
-      color: white;
-    }
-    .nav-item.active {
-      background-color: #3b82f6;
-    }
-    .main {
-      flex: 1;
-      padding: 30px 40px;
-      overflow-y: auto;
-    }
-    h1 {
-      margin-bottom: 30px;
-      font-size: 22px;
-      color: #1f2937;
-    }
-    .card {
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 18px 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-    .question-header {
-      font-size: 17px;
-      font-weight: bold;
-      color: #374151;
-      margin-bottom: 12px;
-    }
-    .options label {
-      display: inline-block;
-      margin-right: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-    }
-    .options input[type="radio"],
-    .options input[type="checkbox"] {
-      margin-right: 6px;
-    }
-    select, textarea {
-      width: 100%;
-      font-size: 14px;
-      padding: 8px;
-      border: 1px solid #d1d5db;
-      border-radius: 4px;
-    }
-    textarea {
-      resize: vertical;
-      height: 60px;
-    }
-
-    /* Responsive Styling */
-    @media (max-width: 768px) {
-      body {
-        flex-direction: column;
-      }
-      .sidebar {
-        width: 100%;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        padding: 15px 20px;
-        position: sticky;
-        top: 0;
-        z-index: 10;
-      }
-      .sidebar .title {
-        font-size: 14px;
-        margin-bottom: 0;
-      }
-      .notepad-header {
-        font-size: 14px;
-        margin-bottom: 0;
-      }
-      .completion-status {
-        font-size: 12px;
-        margin: 0 10px;
-      }
-      .progress-circle {
-        width: 40px;
-        height: 40px;
-        font-size: 12px;
-        margin: 0;
-      }
-      .nav-item {
-        display: none;
-      }
-      .main {
-        padding: 20px;
-      }
-      h1 {
-        font-size: 18px;
-      }
-      .question-header {
-        font-size: 16px;
-      }
-      .options label {
-        display: block;
-        margin: 8px 0;
-      }
-      select, textarea {
-        font-size: 15px;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>TCOL Feedback – Complete</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+:root {
+  --navy:#1f2433;--accent:#00a2e1;--text:#2b2f49;
+  --light:#f7f8fa;--border:#e0e2e6;--card:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{font-family:'Inter','Segoe UI',sans-serif;font-size:16px;color:var(--text);line-height:1.6;}
+body{display:flex;min-height:100vh;background:var(--light);}
+.sidebar{width:300px;background:var(--navy);color:#c0c4d1;padding:32px;flex-shrink:0;}
+.sidebar.hidden{transform:translateX(-100%);}
+.sidebar .title{font-size:1.1rem;color:#f3f4f6;margin-bottom:24px;}
+.sidebar .label{font-size:1rem;color:#f3f4f6;margin-bottom:8px;}
+.sidebar .progress-group{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.sidebar .progress-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1.1rem;font-weight:600;background:#999;}
+.sidebar .progress-text{font-size:1.25rem;color:#f3f4f6;}
+.sidebar .complete-text{font-size:.875rem;color:#a4a8b4;margin-top:4px;margin-bottom:24px;}
+.sidebar .bar-container{height:8px;background:#3b4455;border-radius:4px;overflow:hidden;margin-bottom:24px;}
+.sidebar .bar-fill{height:100%;background:var(--accent);width:0%;}
+.container{flex:1;padding:32px;max-width:none;}
+h1{font-size:1.5rem;font-weight:600;margin-bottom:32px;}
+.card{background:var(--card);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:8px;box-shadow:0 2px 4px rgba(0,0,0,0.05);}
+.question-header{font-size:1.25rem;font-weight:600;margin-bottom:16px;}
+.options label{display:block;margin-bottom:12px;font-size:1rem;cursor:pointer;}
+.options input{appearance:none;width:18px;height:18px;border:2px solid var(--border);margin-right:8px;vertical-align:middle;}
+.options input[type="radio"]{border-radius:50%;}
+.options input[type="checkbox"]{border-radius:4px;}
+.options input:checked{background:var(--accent);border-color:var(--accent);}
+.options input:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+textarea, input[type="text"]{width:100%;padding:10px;font-size:1rem;border:1px solid var(--border);border-radius:6px;resize:vertical;min-height:80px;margin-top:8px;}
+.clear-link{font-size:.875rem;color:#666;margin-top:8px;cursor:pointer;}
+.clear-link:hover{color:var(--accent);}
+.icon-bar{display:flex;gap:12px;margin-top:16px;}
+.icon-bar button{background:none;border:none;font-size:1.2rem;color:var(--text);cursor:pointer;}
+.icon-bar button:hover{color:var(--accent);}
+.icon-bar input[type="file"]{display:none;}
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;z-index:10;}
+.modal-backdrop.active{display:flex;}
+.modal{background:#fff;padding:24px;border-radius:8px;width:90%;max-width:400px;}
+.modal textarea{width:100%;min-height:100px;padding:8px;border:1px solid var(--border);border-radius:4px;}
+.modal button{margin-top:16px;padding:8px 16px;background:var(--accent);color:#fff;border:none;border-radius:4px;cursor:pointer;}
+.hamburger{display:none;position:fixed;top:16px;left:16px;background:var(--accent);color:#fff;padding:10px;font-size:1.2rem;border:none;border-radius:4px;z-index:20;cursor:pointer;}
+@media(max-width:768px){
+  body{flex-direction:column;}
+  .hamburger{display:block;}
+  .sidebar{position:fixed;top:0;bottom:0;z-index:15;}
+  .container{padding:16px;}
+}
+</style>
 </head>
 <body>
 
+<button class="hamburger">☰</button>
 <div class="sidebar">
-  <div class="title">Go back to summary</div>
-  <div class="notepad-header"><i class="fas fa-clipboard"></i>TCOL ‑ Operational Leadership</div>
-  <div class="completion-status">0 of 15 complete</div>
-  <div class="progress-circle">0%</div>
-  <div class="nav-item active">Training Center Requirements</div>
+  <div class="title">Training Center Requirements</div>
+  <div class="progress-group">
+    <div class="progress-circle" id="circle"></div>
+    <div class="progress-text" id="percent">0%</div>
+  </div>
+  <div class="complete-text">Complete</div>
+  <div class="bar-container"><div class="bar-fill" id="bar"></div></div>
 </div>
 
-<div class="main">
-  <h1>TCOL – Training Center Operational Leadership</h1>
-  <div id="questions-container"></div>
+<div class="container">
+  <h1>TCOL – Training Center Feedback Form</h1>
+  <div id="q-container"></div>
+</div>
+
+<div class="modal-backdrop" id="modal">
+  <div class="modal">
+    <label for="comment-input">Add comment:</label>
+    <textarea id="comment-input"></textarea>
+    <button id="save-comment">Save</button>
+    <button id="cancel-comment" style="margin-left:8px; background:#ccc;">Cancel</button>
+  </div>
 </div>
 
 <script>
-  const questions = [
-    "Did the trainee arrive on time for today’s scheduled shift?",
-    "Was the trainee in uniform and ready to begin training promptly?",
-    "Did the trainee appear to have reviewed their MyAcademy materials prior to shift?",
-    "Which STP sector was covered today?",
-    "How engaged was the trainee in today’s training?",
-    "Did the trainee complete the assigned STP tasks for the day?",
-    "Did you observe any safety or SOP concerns during training?",
-    "Was the trainee respectful and receptive to coaching?",
-    "Was follow‑up or redirection required during the shift?",
-    "Would you recommend this trainee for store placement as of now?",
-    "Has the trainee completed all MyAcademy modules assigned up to this date?",
-    "Has the 6‑week or 12‑week check‑in been discussed or scheduled?",
-    "Key strengths observed today:",
-    "Areas for improvement or continued coaching:",
-    "Do you recommend a call or touch‑base with the Store Manager?"
-  ];
+let currentCard = null;
+const questions = [
+  { text:"Did the trainee arrive on time for today’s scheduled shift?", type:"radio", choices:["Yes","Not Complete","Not Applicable"] },
+  { text:"Was the trainee in full uniform and ready to begin training promptly?", type:"radio", choices:["Yes","Not Complete","Not Applicable"] },
+  { text:"Has the trainee completed all assigned MyAcademy modules during today’s shift?", type:"radio", choices:["Yes","Partially","No"] },
+  { text:"Which STP sector(s) were covered today?", type:"checkbox", choices:["Receiving & Backroom","Produce","Meat","Freezer","Dairy","Dry Goods","Cashiering","Front End","Store Walk","Other"] },
+  { text:"Were all hands-on STP activities for today’s sector(s) completed in full?", type:"radio", choices:["Yes – Fully covered","Partially","No – Did not complete expected coverage"] },
+  { text:"How engaged was the trainee during today’s shift?", type:"radio", choices:["Fully engaged","Occasionally disengaged","Frequently disengaged"] },
+  { text:"Did you observe any safety or SOP violations during training?", type:"radio", choices:["No concerns","Minor concerns","Major concerns"] },
+  { text:"Was the trainee respectful and receptive to feedback/coaching?", type:"radio", choices:["Yes","Occasionally resistant","Frequently resistant"] },
+  { text:"Was additional redirection or behavioral follow-up needed today?", type:"radio", choices:["No","Yes – Minor redirection","Yes – Significant follow-up"] },
+  { text:"Has the trainee demonstrated independence in basic STP responsibilities?", type:"radio", choices:["Yes","In Progress","Not yet ready"] },
+  { text:"Are there any ongoing performance concerns to flag for the Store Manager?", type:"radio", choices:["No","Yes – Recommend follow-up"] },
+  { text:"Do you recommend a follow-up conversation with the Store Manager?", type:"radio", choices:["No","Yes – Suggest touch base"] },
+  { text:"Key strengths observed today:", type:"textarea" },
+  { text:"Areas for improvement or continued coaching:", type:"textarea" },
+  { text:"Any barriers observed that may hinder trainee development?", type:"checkbox", choices:["None","Time constraints","Trainee attitude","Language barriers","Other"] }
+];
+const container = document.getElementById("q-container");
 
-  const container = document.getElementById('questions-container');
+// Build questionnaire
+questions.forEach((q,i) => {
+  const card = document.createElement("div"); card.className="card";
+  const header = document.createElement("div"); header.className="question-header";
+  header.textContent = `${i+1}. ${q.text}`; card.appendChild(header);
 
-  questions.forEach((text, idx) => {
-    const num = idx + 1;
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `<div class="question-header">${num}. ${text}</div><div class="options"></div>`;
-    const opts = card.querySelector('.options');
-    let inputs = [];
-
-    if (text.includes('Which STP')) {
-      opts.innerHTML = `
-        <select name="q${num}">
-          <option disabled selected>Select one…</option>
-          <option>Stocking</option><option>Cashiering</option><option>Sales Floor</option><option>Front End</option>
-        </select>`;
-      inputs = [opts.querySelector('select')];
-    } else if (text.endsWith(':') || text.includes('strengths') || text.includes('improvement')) {
-      opts.innerHTML = `<textarea name="q${num}" placeholder="Short answer…"></textarea>`;
-      inputs = [opts.querySelector('textarea')];
-    } else if (text.includes('Do you recommend')) {
-      opts.innerHTML = `
-        <label><input type="radio" name="q${num}" value="Yes"> Yes</label>
-        <label><input type="radio" name="q${num}" value="No"> No</label>`;
-      inputs = Array.from(opts.querySelectorAll('input'));
-    } else {
-      const choices = (text.includes('MyAcademy') || text.includes('follow-up')) ?
-        ['Yes','No','Partially'] : (text.includes('engaged') ?
-        ['Fully engaged','Occasionally disengaged','Frequently disengaged'] :
-        ['Yes','No','N/A']);
-      opts.innerHTML = choices.map(c =>
-        `<label><input type="radio" name="q${num}" value="${c}"> ${c}</label>`).join('');
-      inputs = Array.from(opts.querySelectorAll('input'));
-    }
-
-    container.appendChild(card);
-    inputs.forEach(input => {
-      input.addEventListener('change', updateProgress);
-    });
-  });
-
-  function updateProgress() {
-    const total = questions.length;
-    let done = 0;
-    questions.forEach((_, idx) => {
-      const el = document.querySelector(`[name="q${idx+1}"]`);
-      if (!el) return;
-      if (el.type === 'select-one') {
-        if (el.value !== '') done++;
-      } else if (el.tagName === 'TEXTAREA') {
-        if (el.value.trim().length > 0) done++;
-      } else {
-        if (document.querySelector(`[name="q${idx+1}"]:checked`)) done++;
-      }
-    });
-    const percent = Math.round((done / total) * 100);
-    document.querySelector('.completion-status').textContent = `${done} of ${total} complete`;
-    document.querySelector('.progress-circle').textContent = `${percent}%`;
-    document.querySelector('.progress-circle').style.background =
-      `conic-gradient(#3b82f6 0% ${percent}%, #4b5563 ${percent}% 100%)`;
+  const opts = document.createElement("div"); opts.className="options";
+  if(q.type === "textarea") {
+    opts.innerHTML = `<textarea name="q${i}" placeholder="Short answer…"></textarea>`;
+  } else {
+    q.choices.forEach(choice => opts.innerHTML += `<label><input type="${q.type}" name="q${i}" value="${choice}"> ${choice}</label>`);
+    if(q.choices.includes("Other")) opts.innerHTML += `<input type="text" name="q${i}_other" placeholder="If Other, specify…" />`;
   }
-</script>
+  card.appendChild(opts);
 
+  const clearLink = document.createElement("div");
+  clearLink.className = "clear-link";
+  clearLink.textContent = "Clear answer";
+  clearLink.onclick = () => {
+    card.querySelectorAll("input, textarea").forEach(el => {
+      if(el.type==="radio"||el.type==="checkbox") el.checked=false;
+      else if(el.tagName==="TEXTAREA"||el.type==="text") el.value="";
+    });
+    updateProgress();
+  };
+  card.appendChild(clearLink);
+
+  const iconBar = document.createElement("div"); iconBar.className="icon-bar";
+
+  const commentBtn = document.createElement("button"); commentBtn.textContent="💬";
+  commentBtn.onclick = () => {
+    currentCard = card;
+    document.getElementById("comment-input").value = card.dataset.comment||"";
+    document.getElementById("modal").classList.add("active");
+  };
+  iconBar.appendChild(commentBtn);
+
+  const attachBtn = document.createElement("button"); attachBtn.textContent="📎";
+  const fileInput = document.createElement("input");
+  fileInput.type = "file";
+  fileInput.onchange = () => {
+    if(fileInput.files.length) {
+      card.dataset.attachment = fileInput.files[0].name;
+    }
+  };
+  attachBtn.onclick = () => fileInput.click();
+  iconBar.appendChild(attachBtn);
+  iconBar.appendChild(fileInput);
+
+  card.appendChild(iconBar);
+  container.appendChild(card);
+  card.querySelectorAll("input, textarea").forEach(el => el.addEventListener("change", updateProgress));
+});
+
+document.getElementById("save-comment").onclick = () => {
+  currentCard.dataset.comment = document.getElementById("comment-input").value.trim();
+  document.getElementById("modal").classList.remove("active");
+};
+document.getElementById("cancel-comment").onclick = () => {
+  document.getElementById("modal").classList.remove("active");
+};
+
+function updateProgress() {
+  const total = questions.length;
+  let done = 0;
+  questions.forEach((q,i) => {
+    const els = [...document.getElementsByName(`q${i}`)];
+    if(q.type === "textarea") {
+      if(els[0]?.value.trim()) done++;
+    } else {
+      if(els.some(x => x.checked)) done++;
+    }
+  });
+  const pct = Math.round(done / total * 100);
+  document.getElementById("circle").style.background = `conic-gradient(var(--accent) 0% ${pct}%, #999 ${pct}% 100%)`;
+  document.getElementById("percent").textContent = pct + "%";
+  document.getElementById("bar").style.width = pct + "%";
+}
+
+document.querySelector(".hamburger").onclick = () => {
+  document.querySelector(".sidebar").classList.toggle("hidden");
+};
+</script>
 </body>
 </html>
